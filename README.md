@@ -1,14 +1,14 @@
 # Cálculo para la potencias de frenados en agua.
-Se calculó la potencia de frenado de protones con energías entre 1-250 MeV, se ajustaron diferentes modelos a los datos obtenidos de PSTAR. De igual forma con una simple rutina se hizo un cálculo aproximado resolviendo la ecuación de Bethe-Bloch.
+Se calculó la potencia de frenado de protones con energías entre 1-250 MeV, se ajustaron diferentes modelos, la regla de Bragg-Kleeman y la fórmula de Bethe, a los datos obtenidos de PSTAR. De igual forma con una simple rutina se hizo un cálculo aproximado resolviendo la ecuación de Bethe-Bloch.
 ## Es necesario tener las siguientes bibliotecas de python instaladas 
-'''
+```
 numpy
 matplotlib.pyplot
 scipy.optimize
 scipy.stats
-'''
+```
 ### Cálculo de la ecuación de Bethe-Bloch sin correcciones
-'''
+```
 #definimos las constantes a utilizar
 k = 0.307075 # MeV g^-1 cm^2
 z = 1 # carga del protón en e
@@ -48,10 +48,10 @@ for E in np.arange(1,250,2):
     yy[m]=dEdx
     m=m+1
     print('%f \t %f'% (E,dEdx))
-'''
+```
 ### Para realizar el ajuste
 Cargamos los datos a utilizar:
-'''
+```
 #Load the data set from PSTAR-NIST
 PSTAR = pd.read_csv('PSTAR.txt',sep='\s+',header=None)
 PSTAR = pd.DataFrame(PSTAR)
@@ -61,9 +61,9 @@ a3 = PSTAR[2]  # Nuclear sp
 a4 = PSTAR[3]  # Total SP 
 a5 = PSTAR[4]  #CSDA Range
 a6 = PSTAR[5]  #Projected Range
-'''
+```
 Despues definimos los modelos y la estimación inicial de parametros.
-'''
+```
 #Bragg-Klemann Rule
 def BG(x, p, a):
     return (x**(1-p))/p*a
@@ -83,9 +83,9 @@ print("Std dev errors", perr)
 x_BG = np.linspace(0,a1.max(),50)
 a,p = popt
 y_BG = BG(x_BG,a,p)
-'''
-Despues gráficamos el resultado
-'''
+```
+Después gráficamos el resultado
+```
 #Plot the results
 plt.plot(x_BG,y_BG,'k-', label='Bragg-Kleeman')
 plt.plot(a1,a2, '--', label = 'PSTAR Data')
@@ -97,7 +97,4 @@ plt.grid()
 plt.legend(loc='best')
 #plt.savefig('braggkl.png')
 plt.show()
-'''
-The code in python consist of a simple routine to calculate the stopping power for protons in water. Then it loads the data 
-from the data folder, plot them and fit the data to two models for the calculation of stopping powers, the Bethe-Bloch formula and
-the Bragg-Kleeman rule.
+```
